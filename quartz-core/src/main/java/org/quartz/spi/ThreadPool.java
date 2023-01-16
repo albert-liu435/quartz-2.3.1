@@ -67,6 +67,7 @@ public interface ThreadPool {
     boolean runInThread(Runnable runnable);
 
     /**
+     * 获取阻塞可用线程数
      * <p>
      * Determines the number of threads that are currently available in in
      * the pool.  Useful for determining the number of times

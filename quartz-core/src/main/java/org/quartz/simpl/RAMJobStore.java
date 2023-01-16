@@ -234,7 +234,7 @@ public class RAMJobStore implements JobStore {
         }
     }
 
-    /**
+    /**存储给定的JobDetail和Trigger
      * <p>
      * Store the given <code>{@link org.quartz.JobDetail}</code> and <code>{@link org.quartz.Trigger}</code>.
      * </p>
@@ -1737,7 +1737,7 @@ public class RAMJobStore implements JobStore {
 
 /*******************************************************************************
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *
+ *trigger封装类比较器
  * Helper Classes. * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  */
 
@@ -1761,7 +1761,7 @@ class TriggerWrapperComparator implements Comparator<TriggerWrapper>, java.io.Se
         return super.hashCode();
     }
 }
-
+//job包装类
 class JobWrapper {
 
     public JobKey key;
@@ -1790,7 +1790,7 @@ class JobWrapper {
         return key.hashCode();
     }
 }
-
+//trigger
 class TriggerWrapper {
 
     public final TriggerKey key;

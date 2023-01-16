@@ -1,18 +1,18 @@
 /*
  * All content copyright Terracotta, Inc., unless otherwise indicated. All rights reserved.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not 
- * use this file except in compliance with the License. You may obtain a copy 
- * of the License at 
- * 
- *   http://www.apache.org/licenses/LICENSE-2.0 
- *   
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT 
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
- * License for the specific language governing permissions and limitations 
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy
+ * of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
  * under the License.
- * 
+ *
  */
 
 package org.quartz;
@@ -24,9 +24,10 @@ import org.quartz.impl.triggers.CronTriggerImpl;
 import org.quartz.spi.MutableTrigger;
 
 /**
+ * CronScheduleBuilder里面封装了CronExpression表达式
  * <code>CronScheduleBuilder</code> is a {@link ScheduleBuilder} that defines
  * {@link CronExpression}-based schedules for <code>Trigger</code>s.
- * 
+ *
  * <p>
  * Quartz provides a builder-style API for constructing scheduling-related
  * entities via a Domain-Specific Language (DSL). The DSL can best be utilized
@@ -35,27 +36,27 @@ import org.quartz.spi.MutableTrigger;
  * <code>DateBuilder</code>, <code>JobKey</code>, <code>TriggerKey</code> and
  * the various <code>ScheduleBuilder</code> implementations.
  * </p>
- * 
+ *
  * <p>
  * Client code can then use the DSL to write code such as this:
  * </p>
- * 
+ *
  * <pre>
  * JobDetail job = newJob(MyJob.class).withIdentity(&quot;myJob&quot;).build();
- * 
+ *
  * Trigger trigger = newTrigger()
  *         .withIdentity(triggerKey(&quot;myTrigger&quot;, &quot;myTriggerGroup&quot;))
  *         .withSchedule(dailyAtHourAndMinute(10, 0))
  *         .startAt(futureDate(10, MINUTES)).build();
- * 
+ *
  * scheduler.scheduleJob(job, trigger);
- * 
+ *
  * <pre>
- * 
+ *
  * @see CronExpression
  * @see CronTrigger
  * @see ScheduleBuilder
- * @see SimpleScheduleBuilder 
+ * @see SimpleScheduleBuilder
  * @see CalendarIntervalScheduleBuilder
  * @see TriggerBuilder
  */
@@ -75,7 +76,7 @@ public class CronScheduleBuilder extends ScheduleBuilder<CronTrigger> {
      * Build the actual Trigger -- NOT intended to be invoked by end users, but
      * will rather be invoked by a TriggerBuilder which this ScheduleBuilder is
      * given to.
-     * 
+     *
      * @see TriggerBuilder#withSchedule(ScheduleBuilder)
      */
     @Override
@@ -94,12 +95,10 @@ public class CronScheduleBuilder extends ScheduleBuilder<CronTrigger> {
      * Create a CronScheduleBuilder with the given cron-expression string -
      * which is presumed to be a valid cron expression (and hence only a
      * RuntimeException will be thrown if it is not).
-     * 
-     * @param cronExpression
-     *            the cron expression string to base the schedule on.
+     *
+     * @param cronExpression the cron expression string to base the schedule on.
      * @return the new CronScheduleBuilder
-     * @throws RuntimeException
-     *             wrapping a ParseException if the expression is invalid
+     * @throws RuntimeException wrapping a ParseException if the expression is invalid
      * @see CronExpression
      */
     public static CronScheduleBuilder cronSchedule(String cronExpression) {
@@ -117,12 +116,10 @@ public class CronScheduleBuilder extends ScheduleBuilder<CronTrigger> {
      * Create a CronScheduleBuilder with the given cron-expression string -
      * which may not be a valid cron expression (and hence a ParseException will
      * be thrown if it is not).
-     * 
-     * @param cronExpression
-     *            the cron expression string to base the schedule on.
+     *
+     * @param cronExpression the cron expression string to base the schedule on.
      * @return the new CronScheduleBuilder
-     * @throws ParseException
-     *             if the expression is invalid
+     * @throws ParseException if the expression is invalid
      * @see CronExpression
      */
     public static CronScheduleBuilder cronScheduleNonvalidatedExpression(
@@ -147,9 +144,8 @@ public class CronScheduleBuilder extends ScheduleBuilder<CronTrigger> {
 
     /**
      * Create a CronScheduleBuilder with the given cron-expression.
-     * 
-     * @param cronExpression
-     *            the cron expression to base the schedule on.
+     *
+     * @param cronExpression the cron expression to base the schedule on.
      * @return the new CronScheduleBuilder
      * @see CronExpression
      */
@@ -160,11 +156,9 @@ public class CronScheduleBuilder extends ScheduleBuilder<CronTrigger> {
     /**
      * Create a CronScheduleBuilder with a cron-expression that sets the
      * schedule to fire every day at the given time (hour and minute).
-     * 
-     * @param hour
-     *            the hour of day to fire
-     * @param minute
-     *            the minute of the given hour to fire
+     *
+     * @param hour   the hour of day to fire
+     * @param minute the minute of the given hour to fire
      * @return the new CronScheduleBuilder
      * @see CronExpression
      */
@@ -181,13 +175,10 @@ public class CronScheduleBuilder extends ScheduleBuilder<CronTrigger> {
      * Create a CronScheduleBuilder with a cron-expression that sets the
      * schedule to fire at the given day at the given time (hour and minute) on
      * the given days of the week.
-     * 
-     * @param daysOfWeek
-     *            the dasy of the week to fire
-     * @param hour
-     *            the hour of day to fire
-     * @param minute
-     *            the minute of the given hour to fire
+     *
+     * @param daysOfWeek the dasy of the week to fire
+     * @param hour       the hour of day to fire
+     * @param minute     the minute of the given hour to fire
      * @return the new CronScheduleBuilder
      * @see CronExpression
      * @see DateBuilder#MONDAY
@@ -222,13 +213,10 @@ public class CronScheduleBuilder extends ScheduleBuilder<CronTrigger> {
      * Create a CronScheduleBuilder with a cron-expression that sets the
      * schedule to fire one per week on the given day at the given time (hour
      * and minute).
-     * 
-     * @param dayOfWeek
-     *            the day of the week to fire
-     * @param hour
-     *            the hour of day to fire
-     * @param minute
-     *            the minute of the given hour to fire
+     *
+     * @param dayOfWeek the day of the week to fire
+     * @param hour      the hour of day to fire
+     * @param minute    the minute of the given hour to fire
      * @return the new CronScheduleBuilder
      * @see CronExpression
      * @see DateBuilder#MONDAY
@@ -255,13 +243,10 @@ public class CronScheduleBuilder extends ScheduleBuilder<CronTrigger> {
      * Create a CronScheduleBuilder with a cron-expression that sets the
      * schedule to fire one per month on the given day of month at the given
      * time (hour and minute).
-     * 
-     * @param dayOfMonth
-     *            the day of the month to fire
-     * @param hour
-     *            the hour of day to fire
-     * @param minute
-     *            the minute of the given hour to fire
+     *
+     * @param dayOfMonth the day of the month to fire
+     * @param hour       the hour of day to fire
+     * @param minute     the minute of the given hour to fire
      * @return the new CronScheduleBuilder
      * @see CronExpression
      */
@@ -279,9 +264,8 @@ public class CronScheduleBuilder extends ScheduleBuilder<CronTrigger> {
 
     /**
      * The <code>TimeZone</code> in which to base the schedule.
-     * 
-     * @param timezone
-     *            the time-zone for the schedule.
+     *
+     * @param timezone the time-zone for the schedule.
      * @return the updated CronScheduleBuilder
      * @see CronExpression#getTimeZone()
      */
@@ -293,7 +277,7 @@ public class CronScheduleBuilder extends ScheduleBuilder<CronTrigger> {
     /**
      * If the Trigger misfires, use the
      * {@link Trigger#MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY} instruction.
-     * 
+     *
      * @return the updated CronScheduleBuilder
      * @see Trigger#MISFIRE_INSTRUCTION_IGNORE_MISFIRE_POLICY
      */
@@ -305,7 +289,7 @@ public class CronScheduleBuilder extends ScheduleBuilder<CronTrigger> {
     /**
      * If the Trigger misfires, use the
      * {@link CronTrigger#MISFIRE_INSTRUCTION_DO_NOTHING} instruction.
-     * 
+     *
      * @return the updated CronScheduleBuilder
      * @see CronTrigger#MISFIRE_INSTRUCTION_DO_NOTHING
      */
@@ -317,7 +301,7 @@ public class CronScheduleBuilder extends ScheduleBuilder<CronTrigger> {
     /**
      * If the Trigger misfires, use the
      * {@link CronTrigger#MISFIRE_INSTRUCTION_FIRE_ONCE_NOW} instruction.
-     * 
+     *
      * @return the updated CronScheduleBuilder
      * @see CronTrigger#MISFIRE_INSTRUCTION_FIRE_ONCE_NOW
      */

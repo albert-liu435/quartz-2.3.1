@@ -569,6 +569,7 @@ public interface JobStore {
     /////////////////////////////////////////////////////////////////////////////
 
     /**
+     * 获取下次fire的trigger
      * Get a handle to the next trigger to be fired, and mark it as 'reserved'
      * by the calling scheduler.
      *
