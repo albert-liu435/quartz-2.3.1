@@ -12,6 +12,7 @@ package org.quartz.spi;
 public interface ThreadExecutor {
 
     /**
+     * 提交任务执行
      * Submit a task for execution
      *
      * @param thread the thread to execute

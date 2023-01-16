@@ -396,6 +396,7 @@ public interface Scheduler {
     ///////////////////////////////////////////////////////////////////////////
 
     /**
+     * 注册任务和定时器
      * Add the given <code>{@link org.quartz.JobDetail}</code> to the
      * Scheduler, and associate the given <code>{@link Trigger}</code> with
      * it.

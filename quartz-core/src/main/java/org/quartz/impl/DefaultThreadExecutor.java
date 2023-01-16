@@ -18,6 +18,7 @@ package org.quartz.impl;
 import org.quartz.spi.ThreadExecutor;
 
 /**
+ * 计划在新生成的线程上工作
  * Schedules work on a newly spawned thread. This is the default Quartz
  * behavior.
  *

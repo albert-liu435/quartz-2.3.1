@@ -479,6 +479,7 @@ public class SimpleThreadPool implements ThreadPool {
      */
 
     /**
+     * 工作线程
      * <p>
      * A Worker loops, waiting to execute tasks.
      * </p>

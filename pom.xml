@@ -47,6 +47,7 @@
     </developer>
   </developers>  
   <modules>
+    <module>distribution</module>
     <module>checkstyle</module>
     <module>quartz-core</module>
     <module>quartz-commonj</module>
