@@ -1,20 +1,20 @@
-/* 
- * All content copyright Terracotta, Inc., unless otherwise indicated. All rights reserved. 
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not 
- * use this file except in compliance with the License. You may obtain a copy 
- * of the License at 
- * 
- *   http://www.apache.org/licenses/LICENSE-2.0 
- *   
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT 
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
- * License for the specific language governing permissions and limitations 
+/*
+ * All content copyright Terracotta, Inc., unless otherwise indicated. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy
+ * of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
  * under the License.
- * 
+ *
  */
- 
+
 package org.quartz.examples.example3;
 
 import static org.quartz.CronScheduleBuilder.cronSchedule;
@@ -33,36 +33,38 @@ import org.slf4j.LoggerFactory;
 import java.util.Date;
 
 /**
+ * https://aflyun.blog.csdn.net/article/details/54863144
+ * <p>
  * This Example will demonstrate all of the basics of scheduling capabilities of Quartz using Cron Triggers.
- * 
+ *
  * @author Bill Kratzer
  */
 public class CronTriggerExample {
 
-  public void run() throws Exception {
-    Logger log = LoggerFactory.getLogger(CronTriggerExample.class);
+    public void run() throws Exception {
+        Logger log = LoggerFactory.getLogger(CronTriggerExample.class);
 
-    log.info("------- Initializing -------------------");
+        log.info("------- Initializing -------------------");
 
-    // First we must get a reference to a scheduler
-    SchedulerFactory sf = new StdSchedulerFactory();
-    Scheduler sched = sf.getScheduler();
+        // First we must get a reference to a scheduler
+        SchedulerFactory sf = new StdSchedulerFactory();
+        Scheduler sched = sf.getScheduler();
 
-    log.info("------- Initialization Complete --------");
+        log.info("------- Initialization Complete --------");
 
-    log.info("------- Scheduling Jobs ----------------");
+        log.info("------- Scheduling Jobs ----------------");
 
-    // jobs can be scheduled before sched.start() has been called
+        // jobs can be scheduled before sched.start() has been called
 
-    // job 1 will run every 20 seconds
-    JobDetail job = newJob(SimpleJob.class).withIdentity("job1", "group1").build();
+        // job 1 will run every 20 seconds
+        JobDetail job = newJob(SimpleJob.class).withIdentity("job1", "group1").build();
 
-    CronTrigger trigger = newTrigger().withIdentity("trigger1", "group1").withSchedule(cronSchedule("0/20 * * * * ?"))
-        .build();
+        CronTrigger trigger = newTrigger().withIdentity("trigger1", "group1").withSchedule(cronSchedule("0/20 * * * * ?"))
+                .build();
 
-    Date ft = sched.scheduleJob(job, trigger);
-    log.info(job.getKey() + " has been scheduled to run at: " + ft + " and repeat based on expression: "
-             + trigger.getCronExpression());
+        Date ft = sched.scheduleJob(job, trigger);
+        log.info(job.getKey() + " has been scheduled to run at: " + ft + " and repeat based on expression: "
+                + trigger.getCronExpression());
 
 //    // job 2 will run every other minute (at 15 seconds past the minute)
 //    job = newJob(SimpleJob.class).withIdentity("job2", "group1").build();
@@ -120,39 +122,39 @@ public class CronTriggerExample {
 //    log.info(job.getKey() + " has been scheduled to run at: " + ft + " and repeat based on expression: "
 //             + trigger.getCronExpression());
 //
-    log.info("------- Starting Scheduler ----------------");
+        log.info("------- Starting Scheduler ----------------");
 
-    // All of the jobs have been added to the scheduler, but none of the
-    // jobs
-    // will run until the scheduler has been started
-    sched.start();
+        // All of the jobs have been added to the scheduler, but none of the
+        // jobs
+        // will run until the scheduler has been started
+        sched.start();
 
-    log.info("------- Started Scheduler -----------------");
+        log.info("------- Started Scheduler -----------------");
 
-    log.info("------- Waiting five minutes... ------------");
-    try {
-      // wait five minutes to show jobs
-      Thread.sleep(3000L * 1000L);
-      // executing...
-    } catch (Exception e) {
-      //
+        log.info("------- Waiting five minutes... ------------");
+        try {
+            // wait five minutes to show jobs
+            Thread.sleep(3000L * 1000L);
+            // executing...
+        } catch (Exception e) {
+            //
+        }
+
+        log.info("------- Shutting Down ---------------------");
+
+        sched.shutdown(true);
+
+        log.info("------- Shutdown Complete -----------------");
+
+        SchedulerMetaData metaData = sched.getMetaData();
+        log.info("Executed " + metaData.getNumberOfJobsExecuted() + " jobs.");
+
     }
 
-    log.info("------- Shutting Down ---------------------");
+    public static void main(String[] args) throws Exception {
 
-    sched.shutdown(true);
-
-    log.info("------- Shutdown Complete -----------------");
-
-    SchedulerMetaData metaData = sched.getMetaData();
-    log.info("Executed " + metaData.getNumberOfJobsExecuted() + " jobs.");
-
-  }
-
-  public static void main(String[] args) throws Exception {
-
-    CronTriggerExample example = new CronTriggerExample();
-    example.run();
-  }
+        CronTriggerExample example = new CronTriggerExample();
+        example.run();
+    }
 
 }

@@ -1,18 +1,18 @@
 /*
  * All content copyright Terracotta, Inc., unless otherwise indicated. All rights reserved.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not 
- * use this file except in compliance with the License. You may obtain a copy 
- * of the License at 
- * 
- *   http://www.apache.org/licenses/LICENSE-2.0 
- *   
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT 
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
- * License for the specific language governing permissions and limitations 
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy
+ * of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
  * under the License.
- * 
+ *
  */
 
 package org.quartz;
@@ -21,21 +21,22 @@ import java.util.Calendar;
 import java.util.TimeZone;
 
 /**
+ * 按照日历触发，例如“每个周五”，每个月10日中午或者10：15分
  * The public interface for inspecting settings specific to a CronTrigger, .
  * which is used to fire a <code>{@link org.quartz.Job}</code>
  * at given moments in time, defined with Unix 'cron-like' schedule definitions.
- * 
+ *
  * <p>
  * For those unfamiliar with "cron", this means being able to create a firing
  * schedule such as: "At 8:00am every Monday through Friday" or "At 1:30am
  * every last Friday of the month".
  * </p>
- * 
+ *
  * <p>
- * The format of a "Cron-Expression" string is documented on the 
+ * The format of a "Cron-Expression" string is documented on the
  * {@link org.quartz.CronExpression} class.
  * </p>
- * 
+ *
  * <p>
  * Here are some full examples: <br><table cellspacing="8">
  * <tr>
@@ -143,12 +144,12 @@ import java.util.TimeZone;
  * </tr>
  * </table>
  * </p>
- * 
+ *
  * <p>
  * Pay attention to the effects of '?' and '*' in the day-of-week and
  * day-of-month fields!
  * </p>
- * 
+ *
  * <p>
  * <b>NOTES:</b>
  * <ul>
@@ -160,17 +161,16 @@ import java.util.TimeZone;
  * time moves back or jumps forward.</li>
  * </ul>
  * </p>
- * 
- * @see CronScheduleBuilder
- * @see TriggerBuilder
- * 
+ *
  * @author jhouse
  * @author Contributions from Mads Henderson
+ * @see CronScheduleBuilder
+ * @see TriggerBuilder
  */
 public interface CronTrigger extends Trigger {
 
     public static final long serialVersionUID = -8644953146451592766L;
-    
+
     /**
      * <p>
      * Instructs the <code>{@link Scheduler}</code> that upon a mis-fire
@@ -179,7 +179,7 @@ public interface CronTrigger extends Trigger {
      * </p>
      */
     public static final int MISFIRE_INSTRUCTION_FIRE_ONCE_NOW = 1;
-    
+
     /**
      * <p>
      * Instructs the <code>{@link Scheduler}</code> that upon a mis-fire

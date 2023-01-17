@@ -31,6 +31,7 @@ import java.util.TimeZone;
 import java.util.TreeSet;
 
 /**
+ * 为cron表达式提供解析器和计算器
  * Provides a parser and evaluator for unix-like cron expressions. Cron
  * expressions provide the ability to specify complex time combinations such as
  * &quot;At 8:00am every Monday through Friday&quot; or &quot;At 1:30am every
@@ -427,7 +428,7 @@ public final class CronExpression implements Serializable, Cloneable {
 
 
     ////////////////////////////////////////////////////////////////////////////
-    //
+    //表达式解析方法
     // Expression Parsing Functions
     //
     ////////////////////////////////////////////////////////////////////////////
@@ -458,7 +459,7 @@ public final class CronExpression implements Serializable, Cloneable {
             if (years == null) {
                 years = new TreeSet<Integer>();
             }
-
+            //0代表分
             int exprOn = SECOND;
 
             StringTokenizer exprsTok = new StringTokenizer(expression, " \t",
@@ -517,6 +518,7 @@ public final class CronExpression implements Serializable, Cloneable {
                     + e.toString() + ")", 0);
         }
     }
+
     //存储表达式
     protected int storeExpressionVals(int pos, String s, int type)
             throws ParseException {

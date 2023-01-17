@@ -1,18 +1,18 @@
-/* 
+/*
  * All content copyright Terracotta, Inc., unless otherwise indicated. All rights reserved.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not 
- * use this file except in compliance with the License. You may obtain a copy 
- * of the License at 
- * 
- *   http://www.apache.org/licenses/LICENSE-2.0 
- *   
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT 
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
- * License for the specific language governing permissions and limitations 
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy
+ * of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
  * under the License.
- * 
+ *
  */
 
 package org.quartz.impl.jdbcjobstore;
@@ -28,23 +28,24 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
+ * 缓存委托类
  * <p>
  * This is a driver delegate for Intersystems Caché database.
  * </p>
- * 
+ *
  * <p>
  * Works with the Oracle table creation scripts / schema.
  * </p>
- * 
+ *
  * @author Franck Routier
  * @author <a href="mailto:alci@mecadu.org">Franck Routier</a>
  */
 public class CacheDelegate extends StdJDBCDelegate {
-        
+
     //---------------------------------------------------------------------------
     // protected methods that can be overridden by subclasses
     //---------------------------------------------------------------------------
-  
+
     /**
      * Sets the designated parameter to the byte array of the given
      * <code>ByteArrayOutputStream</code>. Will set parameter value to null if the
@@ -56,7 +57,7 @@ public class CacheDelegate extends StdJDBCDelegate {
     @Override
     protected void setBytes(PreparedStatement ps, int index, ByteArrayOutputStream baos) throws SQLException {
         ps.setObject(index, ((baos == null) ? null : baos.toByteArray()), java.sql.Types.BLOB);
-    } 
+    }
 
     /**
      * {@inheritDoc}
@@ -76,7 +77,7 @@ public class CacheDelegate extends StdJDBCDelegate {
                     InputStream binaryInput = blob.getBinaryStream();
                     if (binaryInput == null) {
                         return null;
-                    } else if (binaryInput instanceof ByteArrayInputStream && ((ByteArrayInputStream) binaryInput).available() == 0 ) {
+                    } else if (binaryInput instanceof ByteArrayInputStream && ((ByteArrayInputStream) binaryInput).available() == 0) {
                         return null;
                     } else {
                         ObjectInputStream in = new ObjectInputStream(binaryInput);
@@ -111,9 +112,9 @@ public class CacheDelegate extends StdJDBCDelegate {
             return getObjectFromBlob(rs, colName);
         }
     }
-    
+
     private static class BlobFreeingStream extends InputStream {
-        
+
         private final Blob source;
         private final InputStream delegate;
 

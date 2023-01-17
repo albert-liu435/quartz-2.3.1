@@ -69,6 +69,7 @@ import java.util.Locale;
 import java.util.Properties;
 
 /**
+ * SchedulerFactory的实现类，用于创建QuartzScheduler实例
  * <p>
  * An implementation of <code>{@link org.quartz.SchedulerFactory}</code> that
  * does all of its work of creating a <code>QuartzScheduler</code> instance

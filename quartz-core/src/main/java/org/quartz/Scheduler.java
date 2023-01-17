@@ -30,6 +30,8 @@ import org.quartz.utils.Key;
 
 /**
  * 代表一个Quartz的独立运行的容器。Trigger和JobDetail可以注册到Scheduler中，二者在Scheduler中拥有各自的组及名称。
+ * <p>
+ * 这是Quartz Scheduler的主要接口，代表一个独立运行容器。调度程序维护JobDetails和触发器的注册表。 一旦注册，调度程序负责执行作业，当他们的相关联的触发器触发（当他们的预定时间到达时）
  * This is the main interface of a Quartz Scheduler.
  *
  * <p>

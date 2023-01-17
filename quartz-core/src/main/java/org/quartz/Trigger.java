@@ -26,7 +26,10 @@ import java.util.Date;
 /**
  * 描述触发Job执行的时间触发规则，主要由SimpleTrigger和CronTrigger这两个子类。
  * 当仅需要触发一次或者以固定间隔周期性进行时。SimpleTrigger是最合适的选择。
- * CronTrigger则可以通过Cron表达式定义出复杂的调度方案。如每天早晨9:00执行
+ * CronTrigger则可以通过Cron表达式定义出复杂的调度方案。如每天早晨9:00执行、
+ * <p>
+ * 具有所有触发器通用属性的基本接口，描述了job执行的时间出发规则。 - 使用TriggerBuilder实例化实际触发器。
+ * <p>
  * The base interface with properties common to all <code>Trigger</code>s -
  * use {@link TriggerBuilder} to instantiate an actual Trigger.
  *
@@ -140,6 +143,7 @@ public interface Trigger extends Serializable, Cloneable, Comparable<Trigger> {
     public String getDescription();
 
     /**
+     * 获取Calendar的名称
      * Get the name of the <code>{@link Calendar}</code> associated with this
      * Trigger.
      *

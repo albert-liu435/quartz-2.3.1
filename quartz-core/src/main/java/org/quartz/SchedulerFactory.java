@@ -22,6 +22,9 @@ import java.util.Collection;
 
 /**
  * 提供获取Scheduler的工厂方法
+ * <p>
+ * 提供用于获取调度程序实例的客户端可用句柄的机制
+ * <p>
  * Provides a mechanism for obtaining client-usable handles to <code>Scheduler</code>
  * instances.
  *

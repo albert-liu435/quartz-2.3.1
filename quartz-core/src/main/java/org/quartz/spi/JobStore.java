@@ -39,6 +39,8 @@ import org.quartz.impl.matchers.GroupMatcher;
 /**
  * job存储store
  * <p>
+ * 通过类实现的接口，这些类要为org.quartz.core.QuartzScheduler的使用提供一个org.quartz.Job和org.quartz.Trigger存储机制。作业和触发器的存储应该以其名称和组的组合为唯一性。
+ * <p>
  * The interface to be implemented by classes that want to provide a <code>{@link org.quartz.Job}</code>
  * and <code>{@link org.quartz.Trigger}</code> storage mechanism for the
  * <code>{@link org.quartz.core.QuartzScheduler}</code>'s use.
@@ -120,6 +122,7 @@ public interface JobStore {
     /////////////////////////////////////////////////////////////////////////////
 
     /**
+     * 存储给定的org.quartz.JobDetail和org.quartz.Trigger。
      * Store the given <code>{@link org.quartz.JobDetail}</code> and <code>{@link org.quartz.Trigger}</code>.
      *
      * @param newJob     The <code>JobDetail</code> to be stored.

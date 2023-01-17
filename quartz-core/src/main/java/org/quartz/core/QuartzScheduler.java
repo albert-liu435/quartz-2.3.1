@@ -80,6 +80,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * 这是Quartz的核心，它是org.quartz.Scheduler接口的间接实现，包含调度org.quartz.Jobs，注册org.quartz.JobListener实例等的方法
  * <p>
  * This is the heart of Quartz, an indirect implementation of the <code>{@link org.quartz.Scheduler}</code>
  * interface, containing methods to schedule <code>{@link org.quartz.Job}</code>s,
@@ -184,7 +185,7 @@ public class QuartzScheduler implements RemotableQuartzScheduler {
     private boolean boundRemotely = false;
 
     private QuartzSchedulerMBean jmxBean = null;
-
+    //初始化开始时间
     private Date initialStart = null;
 
     private final Logger log = LoggerFactory.getLogger(getClass());
@@ -537,15 +538,17 @@ public class QuartzScheduler implements RemotableQuartzScheduler {
         // QTZ-212 : calling new schedulerStarting() method on the listeners
         // right after entering start()
         notifySchedulerListenersStarting();
-
+        //初始化标识为null，进行初始化操作
         if (initialStart == null) {
             initialStart = new Date();
             this.resources.getJobStore().schedulerStarted();
             startPlugins();
         } else {
+            //2 如果已经初始化过，则恢复jobStore
+
             resources.getJobStore().schedulerResumed();
         }
-
+        //3 唤醒所有等待的线程
         schedThread.togglePause(false);
 
         getLog().info(
@@ -800,6 +803,8 @@ public class QuartzScheduler implements RemotableQuartzScheduler {
     ///////////////////////////////////////////////////////////////////////////
 
     /**
+     * 这里的sched 是 QuartzScheduler 对象，Quartz和核心类，Quartz调度器
+     *
      * <p>
      * Add the <code>{@link org.quartz.Job}</code> identified by the given
      * <code>{@link org.quartz.JobDetail}</code> to the Scheduler, and
@@ -816,8 +821,9 @@ public class QuartzScheduler implements RemotableQuartzScheduler {
      */
     public Date scheduleJob(JobDetail jobDetail,
                             Trigger trigger) throws SchedulerException {
+        //验证调度器是否关闭，关闭抛出异常
         validateState();
-
+        //检查 jobDetail和trigger
         if (jobDetail == null) {
             throw new SchedulerException("JobDetail cannot be null");
         }
@@ -835,27 +841,29 @@ public class QuartzScheduler implements RemotableQuartzScheduler {
         }
 
         OperableTrigger trig = (OperableTrigger) trigger;
-
+        //getJobKey 获取 getJobName(), getJobGroup()
         if (trigger.getJobKey() == null) {
             trig.setJobKey(jobDetail.getKey());
         } else if (!trigger.getJobKey().equals(jobDetail.getKey())) {
             throw new SchedulerException(
                     "Trigger does not reference given job!");
         }
-
+        //验证trigger
         trig.validate();
 
         Calendar cal = null;
         if (trigger.getCalendarName() != null) {
             cal = resources.getJobStore().retrieveCalendar(trigger.getCalendarName());
         }
+        //在触发器首次添加到调度程序时由调度程序调用，以便让触发器基于任何关联的日历计算
+        //其第一次触发时间。调用此方法后，getNextFireTime（）应返回有效的答案。
         Date ft = trig.computeFirstFireTime(cal);
 
         if (ft == null) {
             throw new SchedulerException(
                     "Based on configured schedule, the given trigger '" + trigger.getKey() + "' will never fire.");
         }
-
+        //存储给定的org.quartz.JobDetail和org.quartz.Trigger。
         resources.getJobStore().storeJobAndTrigger(jobDetail, trig);
         notifySchedulerListenersJobAdded(jobDetail);
         notifySchedulerThread(trigger.getNextFireTime().getTime());

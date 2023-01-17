@@ -22,7 +22,11 @@ import java.io.Serializable;
 /**
  * Quartz在每次执行Job时，都重新创建一个Job实例，所以它不是直接接受一个Job实例，而是接受一个Job实现类，以便运行时通过newInstance()的反射调用机制实例化Job.因此需要通过
  * 一个类来描述Job的实现类及其他相关静态信息。如Job名称、描述、关联监听器等信息，而JobDetail承担了这一角色
- * 通过该类的构造函数可以更具体的了解它的功能。构造含税要求
+ * 通过该类的构造函数可以更具体的了解它的功能。
+ * <p>
+ * 传递给定作业实例的详细信息属性。 JobDetails将使用JobBuilder创建/定义。
+ * <p>
+ * <p>
  * Conveys the detail properties of a given <code>Job</code> instance. JobDetails are
  * to be created/defined with {@link JobBuilder}.
  *

@@ -245,6 +245,7 @@ public class StdScheduler implements Scheduler {
      */
     public Date scheduleJob(JobDetail jobDetail, Trigger trigger)
             throws SchedulerException {
+        //    //这里的sched 是 QuartzScheduler 对象，Quartz和核心类，Quartz调度器
         return sched.scheduleJob(jobDetail, trigger);
     }
 
