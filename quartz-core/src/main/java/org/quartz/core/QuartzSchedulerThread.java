@@ -250,10 +250,12 @@ public class QuartzSchedulerThread extends Thread {
         while (!halted.get()) {
             try {
                 // check if we're supposed to pause...
+                //检查我们是否应该暂停...
                 synchronized (sigLock) {
                     while (paused && !halted.get()) {
                         try {
                             // wait until togglePause(false) is called...
+                            //等待直到togglePause（false）被调用...
                             sigLock.wait(1000L);
                         } catch (InterruptedException ignore) {
                         }
@@ -277,16 +279,19 @@ public class QuartzSchedulerThread extends Thread {
                     } catch (Exception ignore) {
                     }
                 }
-
+                //2.1获取可用线程的数量
                 int availThreadCount = qsRsrcs.getThreadPool().blockForAvailableThreads();
+                //将永远是true，由于blockForAvailableThreads的语义...
                 if (availThreadCount > 0) { // will always be true, due to semantics of blockForAvailableThreads...
-
+//定义触发器集合
                     List<OperableTrigger> triggers;
-
+//获取当前的时间
                     long now = System.currentTimeMillis();
 
                     clearSignaledSchedulingChange();
                     try {
+                        //2.2 从jobStore中获取下次要触发的触发器集合
+                        //idleWaitTime == 30L * 1000L; 当调度程序发现没有当前触发器要触发，它应该等待多长时间再检查...
                         triggers = qsRsrcs.getJobStore().acquireNextTriggers(
                                 now + idleWaitTime, Math.min(availThreadCount, qsRsrcs.getMaxBatchSize()), qsRsrcs.getBatchTimeWindow());
                         acquiresFailed = 0;
@@ -310,11 +315,13 @@ public class QuartzSchedulerThread extends Thread {
                             acquiresFailed++;
                         continue;
                     }
+                    //判断返回的触发器存在
 
                     if (triggers != null && !triggers.isEmpty()) {
 
                         now = System.currentTimeMillis();
                         long triggerTime = triggers.get(0).getNextFireTime().getTime();
+                        //若有没有触发的Trigger，下次触发时间 next_fire_time 这个会在启动的时候有个默认的misfire机制，如上一篇中分析的 。setNextFireTime(); 即start（）启动时候的当前时间。
                         long timeUntilTrigger = triggerTime - now;
                         while (timeUntilTrigger > 2) {
                             synchronized (sigLock) {
@@ -339,10 +346,12 @@ public class QuartzSchedulerThread extends Thread {
                             now = System.currentTimeMillis();
                             timeUntilTrigger = triggerTime - now;
                         }
+                        //这种情况发生，如果releaseIfScheduleChangedSignificantly 决定 释放Trigger
 
                         // this happens if releaseIfScheduleChangedSignificantly decided to release triggers
                         if (triggers.isEmpty())
                             continue;
+                        //将触发器设置为“正在执行”
 
                         // set triggers to 'executing'
                         List<TriggerFiredResult> bndles = new ArrayList<TriggerFiredResult>();
@@ -353,9 +362,11 @@ public class QuartzSchedulerThread extends Thread {
                         }
                         if (goAhead) {
                             try {
+                                //2.3 通知JobStore调度程序现在正在触发其先前已获取（保留）的给定触发器（执行其关联的作业）。
+
                                 List<TriggerFiredResult> res = qsRsrcs.getJobStore().triggersFired(triggers);
                                 if (res != null)
-                                    bndles = res;
+                                    bndles = res;  //下面的2.3方法返回的数据赋值到bndles
                             } catch (SchedulerException se) {
                                 qs.notifySchedulerListenersError(
                                         "An error occurred while firing triggers '"
@@ -369,6 +380,7 @@ public class QuartzSchedulerThread extends Thread {
                             }
 
                         }
+                        //循环List<TriggerFiredResult> bndles 集合，获取TriggerFiredResult和TriggerFiredBundle等
 
                         for (int i = 0; i < bndles.size(); i++) {
                             TriggerFiredResult result = bndles.get(i);
@@ -384,6 +396,8 @@ public class QuartzSchedulerThread extends Thread {
                             // it's possible to get 'null' if the triggers was paused,
                             // blocked, or other similar occurrences that prevent it being
                             // fired at this time...  or if the scheduler was shutdown (halted)
+                            //如果触发器被暂停，阻塞或其他类似的事件阻止它在这时被触发，或者如果调度器被关闭（暂停），则可以获得'null'
+
                             if (bndle == null) {
                                 qsRsrcs.getJobStore().releaseAcquiredTrigger(triggers.get(i));
                                 continue;
@@ -391,6 +405,8 @@ public class QuartzSchedulerThread extends Thread {
 
                             JobRunShell shell = null;
                             try {
+                                //创建 JobRunShell ，并初始化
+
                                 shell = qsRsrcs.getJobRunShellFactory().createJobRunShell(bndle);
                                 shell.initialize(qs);
                             } catch (SchedulerException se) {
@@ -403,6 +419,8 @@ public class QuartzSchedulerThread extends Thread {
                                 // scheduler being shutdown or a bug in the thread pool or
                                 // a thread pool being used concurrently - which the docs
                                 // say not to do...
+                                //这种情况不应该发生，因为它表示调度程序正在关闭或线程池或线程池中并发使用的错误 - 文档说不要这样做...
+
                                 getLog().error("ThreadPool.runInThread() return false!");
                                 qsRsrcs.getJobStore().triggeredJobComplete(triggers.get(i), bndle.getJobDetail(), CompletedExecutionInstruction.SET_ALL_JOB_TRIGGERS_ERROR);
                             }
@@ -413,6 +431,8 @@ public class QuartzSchedulerThread extends Thread {
                     }
                 } else { // if(availThreadCount > 0)
                     // should never happen, if threadPool.blockForAvailableThreads() follows contract
+                   // 应该永远不会发生，如果threadPool.blockForAvailableThreads（）遵循约定
+
                     continue; // while (!halted)
                 }
 
